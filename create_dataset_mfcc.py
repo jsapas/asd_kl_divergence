@@ -5,6 +5,7 @@ import itertools, re
 import numpy as np
 import yaml
 import librosa
+
 with open("param.yaml") as stream:
     param = yaml.safe_load(stream)
 
@@ -47,7 +48,6 @@ def compute_mfcc2(filename):
 
     return mfcc_delta.T
 
-    
 
 def get_machine_id_list_for_test(target_dir,
                                  dir_name="test",
@@ -76,18 +76,19 @@ def get_machine_id_list_for_test(target_dir,
 
 def create_dataset(machine_class, split):
     machine_id_list = get_machine_id_list_for_test(os.path.join(param['data_root'], machine_class), dir_name=split, ext="wav")
-    print (machine_id_list)
+    print(machine_id_list)
     for machine_id in machine_id_list:
-        h5 = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, split, 'mfcc2'])+'.hdf5', 'w')
-    
-        for filename in glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav')):
-            if  machine_id in filename:
-                print(filename)
-                f = compute_mfcc2(filename)
-                print (f.shape)
-                h5.create_dataset('/{0}/mfccs'.format(os.path.basename(filename).split('.')[0]), data=f)
-     
-        h5.close()
+        hdf5_filename = '_'.join([machine_class, machine_id, split, 'mfcc2']) + '.hdf5'
+        hdf5_filepath = os.path.join(param['feature_root'], hdf5_filename)
+        
+        # Open the HDF5 file using a context manager
+        with h5py.File(hdf5_filepath, 'w') as h5:
+            for filename in glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav')):
+                if machine_id in filename:
+                    print(filename)
+                    f = compute_mfcc2(filename)
+                    print(f.shape)
+                    h5.create_dataset('/{0}/mfccs'.format(os.path.basename(filename).split('.')[0]), data=f)
 
 
 
