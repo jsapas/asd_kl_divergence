@@ -1,10 +1,14 @@
 import os 
 from sklearn import metrics
-import common as com
+#import common as com
 import yaml
 import glob
 import numpy as np
 import csv
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 with open("param.yaml") as stream:
     param = yaml.safe_load(stream)
@@ -24,7 +28,7 @@ def test_file_list_generator(target_dir,
                              prefix_anomaly="anomaly",
                              ext="wav"):
 
-    com.logger.info("target_dir : {}".format(target_dir+"_"+id_name))
+    logger.info("target_dir : {}".format(target_dir+"_"+id_name))
 
     # development
     if mode:
@@ -44,7 +48,7 @@ def test_file_list_generator(target_dir,
         anomaly_labels = np.ones(len(anomaly_files))
         files = np.concatenate((normal_files, anomaly_files), axis=0)
         labels = np.concatenate((normal_labels, anomaly_labels), axis=0)
-        com.logger.info("test_file  num : {num}".format(num=len(files)))
+        logger.info("test_file  num : {num}".format(num=len(files)))
         if len(files) == 0:
             com.logger.exception("no_wav_file!!")
         print("\n========================================")
@@ -57,9 +61,9 @@ def test_file_list_generator(target_dir,
                                                                   id_name=id_name,
                                                                   ext=ext)))
         labels = None
-        com.logger.info("test_file  num : {num}".format(num=len(files)))
+        logger.info("test_file  num : {num}".format(num=len(files)))
         if len(files) == 0:
-            com.logger.exception("no_wav_file!!")
+            logger.exception("no_wav_file!!")
         print("\n=========================================")
 
     return files, labels
@@ -99,8 +103,8 @@ def evaluate(machine_class, machine_id):
     auc = metrics.roc_auc_score(y_true, y_pred)
 
     p_auc = metrics.roc_auc_score(y_true, y_pred, max_fpr=0.1)
-    com.logger.info("AUC : {}".format(auc))
-    com.logger.info("pAUC : {}".format(p_auc))
+    logger.info("AUC : {}".format(auc))
+    logger.info("pAUC : {}".format(p_auc))
 
     
 if __name__ == '__main__':
