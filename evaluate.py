@@ -102,6 +102,7 @@ def evaluate(machine_class, machine_id):
     print("AUC : {}".format(auc))
     print("pAUC : {}".format(p_auc))
     print("\n=========================================")
+    return auc, p_auc
 
     
 if __name__ == '__main__':
