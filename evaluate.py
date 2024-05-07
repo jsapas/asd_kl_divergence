@@ -49,7 +49,6 @@ def test_file_list_generator(target_dir,
         print("test_file  num : {num}".format(num=len(files)))
         if len(files) == 0:
             logging.exception("no_wav_file!!")
-        print("\n========================================")
 
     # evaluation
     else:
@@ -62,7 +61,6 @@ def test_file_list_generator(target_dir,
         print("test_file  num : {num}".format(num=len(files)))
         if len(files) == 0:
             logging.exception("no_wav_file!!")
-        print("\n=========================================")
 
     return files, labels
 
@@ -103,6 +101,7 @@ def evaluate(machine_class, machine_id):
     p_auc = metrics.roc_auc_score(y_true, y_pred, max_fpr=0.1)
     print("AUC : {}".format(auc))
     print("pAUC : {}".format(p_auc))
+    print("\n=========================================")
 
     
 if __name__ == '__main__':
