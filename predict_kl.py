@@ -77,7 +77,7 @@ def generate_predictions(machine_class, machine_id):
     
     for k in h5_train.keys():
         if machine_id in k:
-            embs = h5_train[k]['mfcc'][:]
+            embs = h5_train[k]['mfccs'][:]
             embs = np.hstack((embs[:,:n_mfccs],embs[:, 40:40+n_mfccs], embs[:, 80:80+n_mfccs]))
             
             l,d = embs.shape
@@ -93,7 +93,7 @@ def generate_predictions(machine_class, machine_id):
     i = 0
     for k in h5_train.keys():
         if machine_id in k:
-            embs = h5_train[k]['mfcc'][:]
+            embs = h5_train[k]['mfccs'][:]
             #embs = np.hstack((embs[16:-16,:n_mfccs],embs[16:-16, 30:30+n_mfccs], embs[16:-16, 60:60+n_mfccs]))
             record_emb_means[i] = np.hstack((np.mean(embs[:,:n_mfccs],axis=0), \
                                    np.mean(embs[4:-4, 40:40+n_mfccs],axis=0), \
@@ -112,7 +112,7 @@ def generate_predictions(machine_class, machine_id):
     
     for k in h5_test.keys():
         if machine_id in k:
-            k_embs = h5_test[k]['mfcc'][:]
+            k_embs = h5_test[k]['mfccs'][:]
             #k_embs = np.hstack((k_embs[16:-16,:n_mfccs],k_embs[16:-16, 30:30+n_mfccs], k_embs[16:-16, 60:60+n_mfccs]))
             pm = np.hstack((np.mean(k_embs[:,:n_mfccs],axis=0), \
                                    np.mean(k_embs[4:-4, 40:40+n_mfccs, ],axis=0), \
