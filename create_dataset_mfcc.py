@@ -12,7 +12,7 @@ with open("param.yaml") as stream:
 def compute_mfcc(filename):
     wav = librosa.load(filename, sr=16000)[0]
     melspec = librosa.feature.melspectrogram(
-        wav,
+        y=wav,
         n_fft=2400,
         hop_length=600,
         window='hamming',
@@ -32,7 +32,7 @@ def compute_mfcc(filename):
 def compute_mfcc2(filename):
     wav = librosa.load(filename, sr=16000)[0]
     melspec = librosa.feature.melspectrogram(
-        wav,
+        y=wav,
         n_fft=3200,
         hop_length=800,
         window='hamming',
