@@ -67,8 +67,8 @@ def gau_kl(pm, pv, qm, qv):
 
         
 def generate_predictions(machine_class, machine_id):
-    h5_train = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'train', 'features'])+'.hdf5', 'r')
-    h5_test = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'test', 'features'])+'.hdf5', 'r')
+    h5_train = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'train', 'mfcc2'])+'.hdf5', 'r')
+    h5_test = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'test', 'mfcc2'])+'.hdf5', 'r')
 
     #train_means = h5_train['openl3_means'][:]
 

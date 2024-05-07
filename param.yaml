@@ -1,2 +1,3 @@
 feature_root : ./kl-diver-results
 data_root : /content/drive/MyDrive/thesis/dev_data/
+result_root : ./kl-diver-results-csv
