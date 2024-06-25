@@ -10,18 +10,18 @@ with open("param.yaml") as stream:
     param = yaml.safe_load(stream)
 
 
-def compute_mfcc(filename):
+def compute_mfcc(filename, n_fft=2400, hop_length=600, n_mfcc=40):
     wav = librosa.load(filename, sr=16000)[0]
     melspec = librosa.feature.melspectrogram(
         y=wav,
-        n_fft=2400,
-        hop_length=600,
+        n_fft=n_fft,
+        hop_length=hop_length,
         window='hamming',
-        n_mels=128        
+        n_mels=128
     )
     
     log_mel = librosa.power_to_db(melspec)
-    mfccs = librosa.feature.mfcc(S=log_mel,n_mfcc=40)
+    mfccs = librosa.feature.mfcc(S=log_mel,n_mfcc=n_mfcc)
     delta = librosa.feature.delta(mfccs, width=9)
     delta2 = librosa.feature.delta(mfccs, order=2, width=9)
 
