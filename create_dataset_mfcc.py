@@ -74,7 +74,7 @@ def get_machine_id_list_for_test(target_dir,
     return machine_id_list
 
 
-def create_dataset(machine_class, split):
+def create_dataset(machine_class, split, n_fft=2400, hop_length=600, n_mfcc=40):
     machine_id_list = get_machine_id_list_for_test(os.path.join(param['data_root'], machine_class), dir_name=split, ext="wav")
     print(machine_id_list)
     for machine_id in machine_id_list:
@@ -86,7 +86,7 @@ def create_dataset(machine_class, split):
             for filename in glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav')):
                 if machine_id in filename:
                     print(filename)
-                    f = compute_mfcc2(filename)
+                    f = compute_mfcc(filename, n_fft=n_fft, hop_length=hop_length, n_mfcc=n_mfcc)
                     print(f.shape)
                     h5.create_dataset('/{0}/mfccs'.format(os.path.basename(filename).split('.')[0]), data=f)
 
