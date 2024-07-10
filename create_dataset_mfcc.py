@@ -80,10 +80,18 @@ def create_dataset(machine_class, split, n_fft=2400, hop_length=600, n_mfcc=40):
     for machine_id in machine_id_list:
         hdf5_filename = '_'.join([machine_class, machine_id, split, 'mfcc2']) + '.hdf5'
         hdf5_filepath = os.path.join(param['feature_root'], hdf5_filename)
+
+        # create filelist for mixed sounds
+        if split.startswith("mixed_"):
+            ano_file_list = sorted(glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav')))
+            norm_file_list = sorted(glob.glob("{dir}/{dir_name}/{prefix_normal}_*.{ext}".format(dir=param['data_root'], dir_name="test", prefix_normal="normal", ext="wav")))
+            file_list = norm_file_list + ano_file_list
+        else:
+            file_list = glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav'))
         
         # Open the HDF5 file using a context manager
         with h5py.File(hdf5_filepath, 'w') as h5:
-            for filename in glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav')):
+            for filename in file_list:
                 if machine_id in filename:
                     print(filename)
                     f = compute_mfcc(filename, n_fft=n_fft, hop_length=hop_length, n_mfcc=n_mfcc)
