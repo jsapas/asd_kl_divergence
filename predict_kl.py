@@ -180,7 +180,7 @@ def generate_predictions_excl_deltas(machine_class, machine_id, test_dir="test")
             record_emb_vars[i] = np.var(embs[:, :n_mfccs], axis=0)
             i += 1
 
-    anomaly_score_csv = "{0}/anomaly_score_excl_deltas_{1}_{2}.csv".format(param["result_root"], machine_class, machine_id)
+    anomaly_score_csv = "{0}/anomaly_score_excl_deltas_{1}_{2}_{3}.csv".format(param["result_root"], machine_class, machine_id, test_dir)
     anomaly_score_list = []
 
     for k in h5_test.keys():
