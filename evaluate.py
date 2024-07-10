@@ -32,7 +32,7 @@ def test_file_list_generator(target_dir,
     if mode:
         normal_files = sorted(
             glob.glob("{dir}/{dir_name}/{prefix_normal}_{id_name}*.{ext}".format(dir=target_dir,
-                                                                                 dir_name=dir_name,
+                                                                                 dir_name="test",
                                                                                  prefix_normal=prefix_normal,
                                                                                  id_name=id_name,
                                                                                  ext=ext)))
@@ -90,8 +90,8 @@ def load_score_csv(machine_class, machine_id, deltas):
     return test_files, y_pred
     
 
-def evaluate(machine_class, machine_id, deltas=True):
-    test_files, y_true = test_file_list_generator(os.path.join(param['data_root'], machine_class), machine_id, dir_name='test')
+def evaluate(machine_class, machine_id, deltas=True, test_dir="test"):
+    test_files, y_true = test_file_list_generator(os.path.join(param['data_root'], machine_class), machine_id, dir_name=test_dir)
     test_files2, y_pred = load_score_csv(machine_class, machine_id, deltas=deltas)
 
     assert len(test_files) == len(test_files2)
