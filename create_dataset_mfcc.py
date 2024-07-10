@@ -85,7 +85,7 @@ def create_dataset(machine_class, split, n_fft=2400, hop_length=600, n_mfcc=40):
         if split.startswith("mixed_"):
             print("Mixed sound files !!!")
             ano_file_list = sorted(glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav')))
-            norm_file_list = sorted(glob.glob("{dir}/{dir_name}/{prefix_normal}_*.{ext}".format(dir=param['data_root'], dir_name="test", prefix_normal="normal", ext="wav")))
+            norm_file_list = sorted(glob.glob(os.path.join(param['data_root'], machine_class, "test", 'normal_*.wav')))
             file_list = norm_file_list + ano_file_list
         else:
             print("Not mixed sound files !!!")
