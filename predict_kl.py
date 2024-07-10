@@ -149,8 +149,62 @@ def generate_predictions(machine_class, machine_id):
 
             
     save_csv(save_file_path=anomaly_score_csv, save_data=anomaly_score_list)
-            
+
+def generate_predictions_excl_deltas(machine_class, machine_id):
+    h5_train = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'train', 'mfcc2']) + '.hdf5', 'r')
+    h5_test = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'test', 'mfcc2']) + '.hdf5', 'r')
+
+    N = 0
+    n = 0
     
+    for k in h5_train.keys():
+        if machine_id in k:
+            embs = h5_train[k]['mfccs'][:]
+            l, d = embs[:, :n_mfccs].shape  # Only consider MFCCs
+            
+            N += l
+            n += 1
+
+    all_embs = np.zeros((N, n_mfccs))
+    record_emb_means = np.zeros((n, n_mfccs))
+    record_emb_vars = np.zeros((n, n_mfccs))
+    
+    i = 0
+    for k in h5_train.keys():
+        if machine_id in k:
+            embs = h5_train[k]['mfccs'][:]
+            record_emb_means[i] = np.mean(embs[:, :n_mfccs], axis=0)
+            record_emb_vars[i] = np.var(embs[:, :n_mfccs], axis=0)
+            i += 1
+
+    anomaly_score_csv = "{0}/anomaly_score_excl_deltas_{1}_{2}.csv".format(param["result_root"], machine_class, machine_id)
+    anomaly_score_list = []
+
+    for k in h5_test.keys():
+        if machine_id in k:
+            k_embs = h5_test[k]['mfccs'][:]
+            pm = np.mean(k_embs[:, :n_mfccs], axis=0)
+            pv = np.var(k_embs[:, :n_mfccs], axis=0)
+
+            dist_vec = np.zeros(n)
+            for i in range(n):
+                qm = record_emb_means[i]
+                qv = record_emb_vars[i]
+                pm = pm.astype(np.longdouble)
+                pv = pv.astype(np.longdouble)
+                qm = qm.astype(np.longdouble)
+                qv = qv.astype(np.longdouble)
+                dist_vec[i] = gau_kl(pm, pv, qm, qv) + gau_kl(qm, qv, pm, pv)
+
+            dist_vec = dist_vec[dist_vec.argsort()]
+            
+            a = np.min(dist_vec)
+            
+            print(k, a)
+            anomaly_score_list.append([k + '.wav', a])
+
+    save_csv(save_file_path=anomaly_score_csv, save_data=anomaly_score_list)
+
 
 
 if __name__ == '__main__':
