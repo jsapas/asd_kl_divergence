@@ -65,11 +65,11 @@ def test_file_list_generator(target_dir,
     return files, labels
 
 
-def load_score_csv(machine_class, machine_id, deltas):
+def load_score_csv(machine_class, machine_id, deltas, test_dir):
     if deltas:
-        anomaly_score_csv = "{0}/anomaly_score_{1}_{2}.csv".format(param["result_root"], machine_class, machine_id)
+        anomaly_score_csv = "{0}/anomaly_score_{1}_{2}_{3}.csv".format(param["result_root"], machine_class, machine_id, test_dir)
     else:
-        anomaly_score_csv = "{0}/anomaly_score_excl_deltas_{1}_{2}.csv".format(param["result_root"], machine_class, machine_id)
+        anomaly_score_csv = "{0}/anomaly_score_excl_deltas_{1}_{2}_{3}.csv".format(param["result_root"], machine_class, machine_id, test_dir)
     anomaly_score_list = read_csv(anomaly_score_csv)
     normal_list = []
     abnormal_list = []
@@ -92,7 +92,7 @@ def load_score_csv(machine_class, machine_id, deltas):
 
 def evaluate(machine_class, machine_id, deltas=True, test_dir="test"):
     test_files, y_true = test_file_list_generator(os.path.join(param['data_root'], machine_class), machine_id, dir_name=test_dir)
-    test_files2, y_pred = load_score_csv(machine_class, machine_id, deltas=deltas)
+    test_files2, y_pred = load_score_csv(machine_class, machine_id, deltas=deltas, test_dir=test_dir)
 
     assert len(test_files) == len(test_files2)
     for i in range(len(test_files)):
