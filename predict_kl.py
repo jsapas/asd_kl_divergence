@@ -150,8 +150,12 @@ def generate_predictions(machine_class, machine_id):
             
     save_csv(save_file_path=anomaly_score_csv, save_data=anomaly_score_list)
 
-def generate_predictions_excl_deltas(machine_class, machine_id, test_dir="test"):
-    h5_train = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'train', 'mfcc2']) + '.hdf5', 'r')
+def generate_predictions_excl_deltas(machine_class, machine_id, test_dir="test", small=False):
+    if small == True:
+        h5_train = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'train', 'mfcc_small']) + '.hdf5', 'r')
+    else:
+        h5_train = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'train', 'mfcc2']) + '.hdf5', 'r')
+
     if test_dir == "test":
         h5_test = h5py.File(param['feature_root'] + '/' + '_'.join([machine_class, machine_id, 'test', 'mfcc2']) + '.hdf5', 'r')
     else:
