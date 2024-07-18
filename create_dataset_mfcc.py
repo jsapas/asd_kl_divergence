@@ -116,12 +116,13 @@ def create_dataset_small(machine_class, split, n_fft=2400, hop_length=600, n_mfc
         else:
             print("Not mixed sound files !!!")
             file_list = glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav'))
-            file_list = file_list[:file_num]
-            print(file_list)
+            filtered_file_list = [filename for filename in file_list if machine_id in filename]
+            filtered_file_list = filtered_file_list[:file_num]
+            print(filtered_file_list)
         
         # Open the HDF5 file using a context manager
         with h5py.File(hdf5_filepath, 'w') as h5:
-            for filename in file_list:
+            for filename in filtered_file_list:
                 if machine_id in filename:
                     print(filename)
                     f = compute_mfcc(filename, n_fft=n_fft, hop_length=hop_length, n_mfcc=n_mfcc)
