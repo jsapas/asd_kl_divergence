@@ -117,6 +117,7 @@ def create_dataset_small(machine_class, split, n_fft=2400, hop_length=600, n_mfc
             print("Not mixed sound files !!!")
             file_list = glob.glob(os.path.join(param['data_root'], machine_class, split, '*.wav'))
             file_list = file_list[:file_num]
+            print(file_list)
         
         # Open the HDF5 file using a context manager
         with h5py.File(hdf5_filepath, 'w') as h5:
