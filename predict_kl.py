@@ -197,10 +197,10 @@ def generate_predictions_excl_deltas(machine_class, machine_id, test_dir="test",
             for i in range(n):
                 qm = record_emb_means[i]
                 qv = record_emb_vars[i]
-                #pm = pm.astype(np.longdouble)
-                #pv = pv.astype(np.longdouble)
-                #qm = qm.astype(np.longdouble)
-                #qv = qv.astype(np.longdouble)
+                pm = pm.astype(np.longdouble)
+                pv = pv.astype(np.longdouble)
+                qm = qm.astype(np.longdouble)
+                qv = qv.astype(np.longdouble)
                 dist_vec[i] = gau_kl(pm, pv, qm, qv) + gau_kl(qm, qv, pm, pv)
 
             dist_vec = dist_vec[dist_vec.argsort()]
